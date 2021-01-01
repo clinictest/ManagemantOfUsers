@@ -1,7 +1,7 @@
 # Тестовое задание на позицию Junior Java Developer
 Разработать систему управления пользователями.<br>
 
-![](http://celtsoft.com/img/product/USER_MANAGEMENT.png)
+![](https://www.mrvoip.com/otherservice_img/21026042018122748.png)
 
 Система должна представлять собой WEB-приложение, которое предоставляет интерфейс <br/>
 управления пользователями.<br/>
