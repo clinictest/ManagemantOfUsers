@@ -1,9 +1,8 @@
-package by.AndreiKviatkouski.controller;
+package by.AndreiKviatkouski.controllers;
 
-import by.AndreiKviatkouski.entity.Status;
-import by.AndreiKviatkouski.entity.User;
+import by.AndreiKviatkouski.entities.Status;
+import by.AndreiKviatkouski.entities.User;
 import by.AndreiKviatkouski.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

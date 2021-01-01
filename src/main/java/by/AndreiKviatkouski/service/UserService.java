@@ -1,10 +1,10 @@
 package by.AndreiKviatkouski.service;
 
-import by.AndreiKviatkouski.entity.Role;
-import by.AndreiKviatkouski.entity.Status;
-import by.AndreiKviatkouski.entity.User;
-import by.AndreiKviatkouski.repository.RoleRepository;
-import by.AndreiKviatkouski.repository.UserRepository;
+import by.AndreiKviatkouski.entities.Role;
+import by.AndreiKviatkouski.entities.Status;
+import by.AndreiKviatkouski.entities.User;
+import by.AndreiKviatkouski.repositories.RoleRepository;
+import by.AndreiKviatkouski.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

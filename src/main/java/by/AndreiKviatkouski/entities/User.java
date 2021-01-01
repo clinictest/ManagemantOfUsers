@@ -1,4 +1,4 @@
-package by.AndreiKviatkouski.entity;
+package by.AndreiKviatkouski.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -24,10 +26,22 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(min=2, message = "Не меньше 5 знаков")
+    @NotBlank(message = "Name could not empty  ")
+    @Size(min=3, max = 16, message = "Name should be between 3 and 16 characters")
+    @Pattern(regexp = "^[a-zA-Z]$", message = "Latin characters only")
     private String username;
+
+    @NotBlank(message = "Password could not empty ")
+    @Size(min=3, max = 16, message = "Password should be between 3 and 16 characters")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9]).[a-zA-Z0-9]+$", message = "Password should be at least one symbol and at least one digit")
     private String password;
+
+    @Pattern(regexp = "^[A-Z][a-z]{1,16}$", message = "Example: Li")
+    @Size(min=1, max = 16, message = "Password should be between 1 and 16 characters")
     private String firstName;
+
+    @Pattern(regexp = "^[A-Z][a-z]{1,16}$", message = "Example: Li")
+    @Size(min=1, max = 16, message = "Password should be between 1 and 16 characters")
     private String lastName;
 
     @Transient
