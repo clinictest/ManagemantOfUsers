@@ -34,13 +34,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 //Доступ только для не зарегистрированных пользователей
-                //  .antMatchers("/registration").not().fullyAuthenticated()
+                .antMatchers("/login").not().fullyAuthenticated()
                 //Доступ только для пользователей с ролью Администратор
                 .antMatchers("/user/**").hasRole("ADMIN")
+                //Доступ только для пользователей с ролью User
                 .antMatchers("/user/{id}").hasRole("USER")
                 .antMatchers("/user").hasRole("USER")
                 //Доступ разрешен всем пользователей
-                .antMatchers("/user", "/resources/**").permitAll()
+                // .antMatchers("/login", "/resources/**").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
                 .and()
@@ -61,10 +62,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder());
     }
 
-        @Override
-    public void configure(WebSecurity web) throws Exception{
+    @Override
+    public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/resources/**", "/static/**", "/css/**","/js/**","/images/**","/favicon.ico").anyRequest();
+                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/favicon.ico").anyRequest();
     }
 }

@@ -23,25 +23,25 @@ import java.util.Set;
 
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NotBlank(message = "Name could not empty  ")
-    @Size(min=3, max = 16, message = "Name should be between 3 and 16 characters")
-    @Pattern(regexp = "^[a-zA-Z]$", message = "Latin characters only")
+    @Size(min = 3, max = 16, message = "Name should be between 3 and 16 characters")
+    @Pattern(regexp = "^[a-zA-Z]{3,16}$", message = "Latin characters only")
     private String username;
 
     @NotBlank(message = "Password could not empty ")
-    @Size(min=3, max = 16, message = "Password should be between 3 and 16 characters")
+    @Size(min = 3, max = 16, message = "Password should be between 3 and 16 characters")
     @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9]).[a-zA-Z0-9]+$", message = "Password should be at least one symbol and at least one digit")
     private String password;
 
     @Pattern(regexp = "^[A-Z][a-z]{1,16}$", message = "Example: Li")
-    @Size(min=1, max = 16, message = "Password should be between 1 and 16 characters")
+    @Size(min = 1, max = 16, message = "Password should be between 1 and 16 characters")
     private String firstName;
 
     @Pattern(regexp = "^[A-Z][a-z]{1,16}$", message = "Example: Li")
-    @Size(min=1, max = 16, message = "Password should be between 1 and 16 characters")
+    @Size(min = 1, max = 16, message = "Password should be between 1 and 16 characters")
     private String lastName;
 
     @Transient
@@ -50,6 +50,9 @@ public class User implements UserDetails {
     SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy.MM.dd 'time' hh:mm:ss a zzz");
     private String createdAt = formatForDateNow.format(date);
 
+    @Transient
+    private String updatedAt;
+
     @Enumerated(value = EnumType.STRING)
     private Status status = Status.ACTIVE;
 
@@ -57,10 +60,6 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    @Override
-    public String getUsername() {
-        return username;
-    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -89,7 +88,8 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
+
         return password;
     }
-
 }
+

@@ -1,6 +1,5 @@
 package by.AndreiKviatkouski.controllers;
 
-import by.AndreiKviatkouski.entities.Status;
 import by.AndreiKviatkouski.entities.User;
 import by.AndreiKviatkouski.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -17,45 +17,48 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user")
+    @GetMapping()
     public String userList(Model model) {
-        model.addAttribute("allUsers", userService.allUsers());
-        return "user";
+        model.addAttribute("users", userService.allUsers());
+        return "users/user";
     }
 
-    @PostMapping("/user")
-    public String updateStatusUser( Long userId, Status status, String action,Model model) {
-        if (action.equals("go")) {
-            model.addAttribute("status",status);
-            userService.updateStatusUser(status, userId);
-        }
 
+    @GetMapping("/{id}")
+    public String getUser(@PathVariable("id") long id, Model model) {
+        model.addAttribute("user", userService.show(id));
+        return "users/view";
+    }
+
+
+    @GetMapping("/{id}/edit")
+    public String edit(Model model, @PathVariable("id")long id) {
+        model.addAttribute("user", userService.show(id));
+        return "users/edit";
+    }
+
+    @PatchMapping("/{id}")
+    public String update(@ModelAttribute("user") User user, @PathVariable("id") long id) {
+        userService.update(user,id);
         return "redirect:/user";
     }
 
-    @GetMapping("/user/{userId}")
-    public String getUser(@PathVariable("userId") Long userId, Model model) {
-        model.addAttribute("allUsers", userService.userList(userId));
-        return "view";
+
+    @GetMapping("/new")
+    public String newUser(@ModelAttribute("user") User user) {
+        return "users/new";
+    }
+
+    @PostMapping()
+    public String create(@ModelAttribute("user") User user) {
+        userService.saveUser(user);
+        return "redirect:/user";
     }
 
 
-    @PutMapping("/user/{userId}/edit")
-    public String editUser(@PathVariable("userId") Status status, User userForm, Long userId, Model model) {
-        model.addAttribute("allUsers", userService.userList(userId));
-        model.addAttribute("status", status);
-        return "edit";
-    }
-
-
-    @GetMapping("/user/new")
-    public String registration(Model model) {
-        model.addAttribute("userForm", new User());
-        return "new";
-    }
-
-    @PostMapping("/user/new")
-    public String addUser(Model model) {
-        return "new";
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") long id) {
+        userService.delete(id);
+        return "redirect:/user";
     }
 }

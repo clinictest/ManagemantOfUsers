@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List of users</title>
+</head>
+<body>
+
+<div class="container">
+    <div th:fragment="content">
+
+        <div>
+            <a href="/user/new">Next</a> |
+            <a href="/user/new">Previous</a> |
+            <a href="/login">Logout</a>
+        </div>
+
+        <h2>List of users</h2>
+        <table border="1">
+            <tr>
+                <th>#</th>
+                <th>UserName</th>
+                <th>CreatedAt</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Password</th>
+                <th>Status</th>
+                <th>Role</th>
+                <th>Link</th>
+                <th>Link</th>
+                <th>Link</th>
+            </tr>
+
+            <tr th:each="user, iterStar : ${users}">
+                <td th:text="${iterStar.index+1}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.createdAt}"></td>
+                <td th:text="${user.firstName}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${user.password}"></td>
+                <td th:text="${user.status}"></td>
+                <td th:text="${user.roles}"></td>
+
+                <td>
+                    <form th:method="GET" th:action="@{/user/{id}(id=${user.getId()})}" th:object="${user}">
+                        <input type="submit" value="Show details"/></form>
+                </td>
+                <td>
+                    <form th:method="PATCH" th:action="@{/user/{id}(id=${user.getId()})/edit}" th:object="${user}">
+                        <input type="submit" value="Edit"/></form>
+                </td>
+                <td>
+                    <form th:method="DELETE" th:action="@{/user/{id}(id=${user.getId()})}" th:object="${user}">
+                    <input type="submit" value="Delete"/></form>
+                </td>
+            </tr>
+        </table>
+
+        <br>
+
+    </div>
+</div>
+<br/>
+<hr/>
+
+<a href="/user/new">Create new person</a>
+
+</body>
+</html>

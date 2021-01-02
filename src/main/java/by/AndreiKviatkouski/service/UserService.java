@@ -5,7 +5,6 @@ import by.AndreiKviatkouski.entities.Status;
 import by.AndreiKviatkouski.entities.User;
 import by.AndreiKviatkouski.repositories.RoleRepository;
 import by.AndreiKviatkouski.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,14 +25,17 @@ public class UserService implements UserDetailsService {
     @PersistenceContext
     private EntityManager em;
 
-    @Autowired
-    UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-    @Autowired
-    RoleRepository roleRepository;
+    final UserRepository userRepository;
 
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    final RoleRepository roleRepository;
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -44,6 +48,18 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public boolean check(User user) {
+        for (int i = 0; i < userRepository.findAll().size(); i++) {
+            User user1 = userRepository.findAll().get(i);
+            if (user1.getPassword().equals(user.getPassword()) &&
+                    user1.getUsername().equals(user.getUsername())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public User findUserById(Long userId) {
         Optional<User> userFromDb = userRepository.findById(userId);
         return userFromDb.orElse(new User());
@@ -53,35 +69,78 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public boolean saveUser(User user) {
+    public void saveUser(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
-
-        if (userFromDB != null) {
-            return false;
-        }
-        user.setUsername(user.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setFirstName(user.getFirstName());
-        user.setLastName(user.getLastName());
-        user.setCreatedAt(user.getCreatedAt());
-        user.setStatus(Status.ACTIVE);
-        userRepository.save(user);
-        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
-        return true;
-    }
-
-
-    public void updateStatusUser(Status status, Long userId) {
-
-        if (userRepository.findById(userId).isPresent()) {
-            userRepository.updateStatusById(status,userId);
+        if (userFromDB == null) {
+            user.setUsername(bCryptPasswordEncoder.encode(user.getUsername()));
+            user.setPassword(user.getPassword());
+            user.setFirstName(user.getFirstName());
+            user.setLastName(user.getLastName());
+            user.setCreatedAt(user.getCreatedAt());
+            user.setStatus(Status.ACTIVE);
+            user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+            userRepository.save(user);
         }
     }
 
+    public boolean update(User user, long id) {
+        User existUser = userRepository.getOne(id);
 
-    public List<User> userList(Long idMin) {
-        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-                .setParameter("paramId", idMin).getResultList();
+        boolean checkParam = false;
+        if (user.getUsername() != null) {
+            existUser.setUsername(user.getUsername());
+            checkParam = true;
+        }
+        if (user.getPassword() != null) {
+            existUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            checkParam = true;
+        }
+
+        if (user.getFirstName() != null) {
+            existUser.setFirstName(user.getFirstName());
+            checkParam = true;
+        }
+        if (user.getLastName() != null) {
+            existUser.setLastName(user.getLastName());
+            checkParam = true;
+        }
+        if (user.getStatus() != null) {
+            existUser.setStatus(user.getStatus());
+            checkParam = true;
+        }
+        if (user.getRoles() != null) {
+            existUser.setRoles(user.getRoles());
+            checkParam = true;
+        }
+
+        if (checkParam) {
+            Date date = new Date();
+            SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy.MM.dd 'time' hh:mm:ss a zzz");
+            existUser.setUpdatedAt(formatForDateNow.format(date));
+            userRepository.save(existUser);
+            return true;
+        }
+        return false;
+    }
+
+    public User show(long id) {
+        return em.createQuery("SELECT u FROM User u WHERE u.id=:id", User.class)
+                .setParameter("id", id).getSingleResult();
+    }
+
+//    public List<User> userList(Long idMin) {
+//        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
+//                .setParameter("paramId", idMin).getResultList();
+//    }
+//
+//
+//    public User getById(long id) {
+//        return userRepository.getOne(id);
+//
+//    }
+
+    public void delete(long id) {
+        userRepository.deleteById(id);
     }
 }
 
