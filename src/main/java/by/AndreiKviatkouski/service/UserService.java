@@ -60,11 +60,6 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    public User findUserById(Long userId) {
-        Optional<User> userFromDb = userRepository.findById(userId);
-        return userFromDb.orElse(new User());
-    }
-
     public List<User> allUsers() {
         return userRepository.findAll();
     }
@@ -122,10 +117,20 @@ public class UserService implements UserDetailsService {
         }
         return false;
     }
-
+//методы show and findUserById равнозначны и работают с страницей id
     public User show(long id) {
         return em.createQuery("SELECT u FROM User u WHERE u.id=:id", User.class)
                 .setParameter("id", id).getSingleResult();
+    }
+    //метод getById не работает с страницей id
+    public User getById(long id) {
+        return userRepository.getOne(id);
+
+    }
+    //методы show and findUserById равнозначны и работают с страницей id
+    public User findUserById(long userId) {
+        Optional<User> userFromDb = userRepository.findById(userId);
+        return userFromDb.orElse(new User());
     }
 
 //    public List<User> userList(Long idMin) {
@@ -134,10 +139,7 @@ public class UserService implements UserDetailsService {
 //    }
 //
 //
-//    public User getById(long id) {
-//        return userRepository.getOne(id);
-//
-//    }
+
 
     public void delete(long id) {
         userRepository.deleteById(id);

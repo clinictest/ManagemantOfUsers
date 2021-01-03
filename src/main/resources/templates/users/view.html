@@ -34,7 +34,7 @@
        <td th:text="${user.roles}"></td>
 
         <td>
-            <form th:method="patch" th:action="@{/user/{id}(id=${user.getId()})/edit}" th:object="${user}">
+            <form th:method="patch" th:action="@{/user/{id}/edit(id=${user.getId()})}" th:object="${user}">
                 <input type="submit" value="Edit"/></form>
         </td>
         <td>

@@ -16,7 +16,7 @@
         </div>
 
         <h2>List of users</h2>
-        <table border="1">
+        <table border="1" bgcolor="beige">
             <tr>
                 <th>#</th>
                 <th>UserName</th>
@@ -46,7 +46,7 @@
                         <input type="submit" value="Show details"/></form>
                 </td>
                 <td>
-                    <form th:method="PATCH" th:action="@{/user/{id}(id=${user.getId()})/edit}" th:object="${user}">
+                    <form th:method="GET" th:action="@{/user/{id}/edit(id=${user.getId()})}" th:object="${user}">
                         <input type="submit" value="Edit"/></form>
                 </td>
                 <td>
@@ -54,6 +54,7 @@
                     <input type="submit" value="Delete"/></form>
                 </td>
             </tr>
+
         </table>
 
         <br>

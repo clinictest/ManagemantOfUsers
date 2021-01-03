@@ -26,7 +26,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String getUser(@PathVariable("id") long id, Model model) {
-        model.addAttribute("user", userService.show(id));
+        model.addAttribute("user", userService.findUserById(id));
         return "users/view";
     }
 
