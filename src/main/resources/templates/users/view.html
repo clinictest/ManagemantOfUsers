@@ -34,11 +34,11 @@
        <td th:text="${user.roles}"></td>
 
         <td>
-            <form th:method="patch" th:action="@{/user/{id}/edit(id=${user.getId()})}" th:object="${user}">
+            <form th:method="GET" th:action="@{/user/{id}/edit(id=${user.getId()})}" th:object="${user}">
                 <input type="submit" value="Edit"/></form>
         </td>
         <td>
-            <form th:method="delete" th:action="@{/user/{id}(id=${user.getId()})}" th:object="${user}">
+            <form th:method="DELETE" th:action="@{/user/{id}(id=${user.getId()})}" th:object="${user}">
                 <input type="submit" value="Delete"/></form>
         </td>
         </tr>
