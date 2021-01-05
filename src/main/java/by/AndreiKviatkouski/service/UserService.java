@@ -1,10 +1,14 @@
 package by.AndreiKviatkouski.service;
 
-import by.AndreiKviatkouski.entities.Role;
-import by.AndreiKviatkouski.entities.Status;
-import by.AndreiKviatkouski.entities.User;
-import by.AndreiKviatkouski.repositories.RoleRepository;
+
+import by.AndreiKviatkouski.models.Role;
+import by.AndreiKviatkouski.models.Status;
+import by.AndreiKviatkouski.models.User;
 import by.AndreiKviatkouski.repositories.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -25,15 +28,13 @@ public class UserService implements UserDetailsService {
     @PersistenceContext
     private EntityManager em;
 
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-    final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    final RoleRepository roleRepository;
-
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
 
@@ -48,6 +49,14 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public Page<User> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        return this.userRepository.findAll(pageable);
+    }
+
     public boolean check(User user) {
         for (int i = 0; i < userRepository.findAll().size(); i++) {
             User user1 = userRepository.findAll().get(i);
@@ -60,22 +69,28 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
+    public User findUserById(Long userId) {
+        Optional<User> userFromDb = userRepository.findById(userId);
+        return userFromDb.orElse(new User());
+    }
+
     public List<User> allUsers() {
         return userRepository.findAll();
     }
 
-    public void saveUser(User user) {
+    public boolean saveUser(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
-        if (userFromDB == null) {
-            user.setUsername(bCryptPasswordEncoder.encode(user.getUsername()));
-            user.setPassword(user.getPassword());
-            user.setFirstName(user.getFirstName());
-            user.setLastName(user.getLastName());
-            user.setCreatedAt(user.getCreatedAt());
+        if (userFromDB != null) {
+            return false;
+        } else {
+            user.setUsername(user.getUsername());
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            user.setCreatedAt(new Date());
             user.setStatus(Status.ACTIVE);
             user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
             userRepository.save(user);
         }
+        return true;
     }
 
     public boolean update(User user, long id) {
@@ -109,28 +124,16 @@ public class UserService implements UserDetailsService {
         }
 
         if (checkParam) {
-            Date date = new Date();
-            SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy.MM.dd 'time' hh:mm:ss a zzz");
-            existUser.setUpdatedAt(formatForDateNow.format(date));
+            existUser.setUpdatedAt(new Date());
             userRepository.save(existUser);
             return true;
         }
         return false;
     }
-//методы show and findUserById равнозначны и работают с страницей id
+
     public User show(long id) {
         return em.createQuery("SELECT u FROM User u WHERE u.id=:id", User.class)
                 .setParameter("id", id).getSingleResult();
-    }
-    //метод getById не работает с страницей id
-    public User getById(long id) {
-        return userRepository.getOne(id);
-
-    }
-    //методы show and findUserById равнозначны и работают с страницей id
-    public User findUserById(long userId) {
-        Optional<User> userFromDb = userRepository.findById(userId);
-        return userFromDb.orElse(new User());
     }
 
 //    public List<User> userList(Long idMin) {
@@ -139,15 +142,13 @@ public class UserService implements UserDetailsService {
 //    }
 //
 //
-
+//    public User getById(long id) {
+//        return userRepository.getOne(id);
+//
+//    }
 
     public void delete(long id) {
         userRepository.deleteById(id);
     }
 }
-
-
-
-
-
 

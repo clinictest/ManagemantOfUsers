@@ -1,16 +1,17 @@
-package by.AndreiKviatkouski.entities;
+package by.AndreiKviatkouski.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -31,9 +32,7 @@ public class User implements UserDetails {
     @Pattern(regexp = "^[a-zA-Z]{3,16}$", message = "Latin characters only")
     private String username;
 
-    @NotBlank(message = "Password could not empty ")
-    @Size(min = 3, max = 16, message = "Password should be between 3 and 16 characters")
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9]).[a-zA-Z0-9]+$", message = "Password should be at least one symbol and at least one digit")
+    @NotNull
     private String password;
 
     @Pattern(regexp = "^[A-Z][a-z]{1,16}$", message = "Example: Li")
@@ -44,22 +43,24 @@ public class User implements UserDetails {
     @Size(min = 1, max = 16, message = "Password should be between 1 and 16 characters")
     private String lastName;
 
-    @Transient
-    Date date = new Date();
-    @Transient
-    SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy.MM.dd 'time' hh:mm:ss a zzz");
-    private String createdAt = formatForDateNow.format(date);
 
-    @Transient
-    private String updatedAt;
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    private Date createdAt;
+
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    private Date updatedAt;
 
     @Enumerated(value = EnumType.STRING)
-    private Status status = Status.ACTIVE;
+    private Status status;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
+    @Override
+    public String getUsername() {
+        return username;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -81,6 +82,10 @@ public class User implements UserDetails {
         return true;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
@@ -88,7 +93,6 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-
         return password;
     }
 }

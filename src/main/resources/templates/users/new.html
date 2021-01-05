@@ -8,7 +8,7 @@
 
 <h2>Create New User</h2>
 
-<form th:method="POST" th:action="@{/new}" th:object="${user}">
+<form th:method="POST" th:action="@{/user}" th:object="${user}">
 
     <br><br/>
 
@@ -65,7 +65,7 @@
     <input type="submit" value="Create"/>
 </form>
 
-<br></br>
+<br>
 
 <a href="/user">Back</a>
 

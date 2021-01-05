@@ -1,6 +1,6 @@
 package by.AndreiKviatkouski.repositories;
 
-import by.AndreiKviatkouski.entities.User;
+import by.AndreiKviatkouski.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

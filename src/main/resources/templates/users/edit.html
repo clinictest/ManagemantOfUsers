@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form th:method="PATCH" th:action="@{/user/id(id=${user.getId})}" th:object="${user}">
+<form th:method="PATCH" th:action="@{/user/{id}(id=${user.getId})}" th:object="${user}">
 
     <br><br/>
 
@@ -68,8 +68,18 @@
 
     <br><br/>
 
+    <label for="Role">Select role: </label>
+    <select name="role" type="text"  id="Role" multiple>
+        <option th:each="role: ${roles}" th:value="${role}" th:text="${role.name}">
+<!--            <p th:value="${roles.add(role)}"></p>-->
+        </option>
+    </select>
+
+    <br><br/>
+
     <input type="submit" value="Update"/>
 </form>
+
 <br></br>
 <a href="/user">Back</a>
 </body>

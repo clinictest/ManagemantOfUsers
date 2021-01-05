@@ -1,4 +1,4 @@
-package by.AndreiKviatkouski.entities;
+package by.AndreiKviatkouski.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,6 @@ import java.util.Set;
 public class Role implements GrantedAuthority {
     @Id
     private Long id;
-
 
     private String name;
 

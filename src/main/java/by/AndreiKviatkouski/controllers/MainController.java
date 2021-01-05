@@ -1,6 +1,6 @@
 package by.AndreiKviatkouski.controllers;
 
-import by.AndreiKviatkouski.entities.User;
+import by.AndreiKviatkouski.models.User;
 import by.AndreiKviatkouski.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -34,10 +34,8 @@ public class MainController {
             return "login";
         }
         if (userService.check(userForm)) {
-            System.out.println(true);
             return "users/user";
         }
-        System.out.println(false);
         return "login";
     }
 }

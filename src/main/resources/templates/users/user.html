@@ -4,23 +4,32 @@
     <meta charset="UTF-8">
     <title>List of users</title>
 </head>
-<body>
+<br>
 
 <div class="container">
     <div th:fragment="content">
 
-        <div>
-            <a href="/user/new">Next</a> |
-            <a href="/user/new">Previous</a> |
-            <a href="/login">Logout</a>
-        </div>
 
         <h2>List of users</h2>
-        <table border="1" bgcolor="beige">
-            <tr>
+        <table bgcolor="#f5f5dc" border="1">
+
+            <thead>
+
+            <tr bgcolor="#32cd32">
                 <th>#</th>
-                <th>UserName</th>
-                <th>CreatedAt</th>
+                <th>
+                    <a th:href="@{'/user/page/' + ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">
+                        username</a>
+                </th>
+                <th>
+                    <a th:href="@{'/user/page/' + ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">
+                        Created_At</a>
+                </th>
+
+                <th>
+                    <a th:href="@{'/user/page/' + ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">
+                        Updated_At_At</a>
+                </th>
                 <th>FirstName</th>
                 <th>LastName</th>
                 <th>Password</th>
@@ -31,17 +40,18 @@
                 <th>Link</th>
             </tr>
 
+            </thead>
+            <tbody>
             <tr th:each="user, iterStar : ${users}">
-                <td th:text="${iterStar.index+1}"></td>
+                <td th:text="${iterStar.index+1}" bgcolor="#32cd32"></td>
                 <td th:text="${user.username}"></td>
                 <td th:text="${user.createdAt}"></td>
+                <td th:text="${user.updatedAt}"></td>
                 <td th:text="${user.firstName}"></td>
                 <td th:text="${user.lastName}"></td>
                 <td th:text="${user.password}"></td>
                 <td th:text="${user.status}"></td>
-                <td th:each="role :${user.roles}">
-                    <p th:text="${role.getName()}"></p>
-                </td>
+                <td th:each="role :${user.roles}" th:text="${role.getName()}"></td>
 
                 <td>
                     <form th:method="GET" th:action="@{/user/{id}(id=${user.getId()})}" th:object="${user}">
@@ -53,12 +63,13 @@
                 </td>
                 <td>
                     <form th:method="DELETE" th:action="@{/user/{id}(id=${user.getId()})}" th:object="${user}">
-                    <input type="submit" value="Delete"/></form>
+                        <input style="color: red" type="submit" value="Delete"/></form>
                 </td>
             </tr>
+            <tbody>
 
         </table>
-
+        <a style="color: blue" href="/user/new"><h4>CREATE NEW USER</h4></a>
         <br>
 
     </div>
@@ -66,7 +77,85 @@
 <br/>
 <hr/>
 
-<a href="/user/new">Create new person</a>
+
+<!-- customers pagination -->
+<!--<nav aria-label="Pagination" th:if="${totalPages gt 0}">-->
+<!--    <ul class="pagination justify-content-center font-weight-medium">-->
+<!--        <li class="page-item" th:classappend="${users.number eq 0} ? 'disabled'">-->
+<!--            <a class="page-link svg-icon"-->
+<!--               th:href="@{/user?page={id}(id=${customers.number lt 2 ? 1 : customers.number})}"-->
+<!--               aria-label="Previous"-->
+<!--               title="Previous Page" rel="tooltip">-->
+<!--                <span aria-hidden="true" data-feather="chevrons-left" width="20" height="20"></span>-->
+<!--            </a>-->
+<!--        </li>-->
+<!--        <li class="page-item" th:classappend="${i eq users.number + 1} ? 'active'"-->
+<!--            th:each="i : ${#numbers.sequence( customers.number + 1, customers.totalPages > 10 + customers.number ? customers.number + 10 : customers.totalPages, 1)}">-->
+<!--            <a class="page-link" th:href="@{/user.html?page={id}(id=${i})}" th:text="${i}"-->
+<!--               th:title="${'Page '+ i}"-->
+<!--               rel="tooltip"></a>-->
+<!--        </li>-->
+<!--        <li class="page-item disabled" th:if="${customers.number + 10 < customers.totalPages}">-->
+<!--            <a class="page-link svg-icon" href="#">-->
+<!--                <span data-feather="more-horizontal" width="20" height="20"></span>-->
+<!--            </a>-->
+<!--        </li>-->
+<!--        <li class="page-item" th:classappend="${customers.number + 1 eq customers.totalPages} ? 'disabled'">-->
+<!--            <a class="page-link svg-icon" th:href="@{/admin/customers?page={id}(id=${customers.number + 2})}"-->
+<!--               aria-label="Next"-->
+<!--               title="Next Page" rel="tooltip">-->
+<!--                <span aria-hidden="true" data-feather="chevrons-right" width="20" height="20"></span>-->
+<!--            </a>-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</nav>-->
+
+<br th:if="${totalPages > 1}">
+
+<br class="col-sm-2">
+
+    Total Rows: [[${totalItems}]]
+    Total Pages: [[${totalPages}]]
+
+</div>
+
+<!--    <a th:if="${currentPage < totalPages}"-->
+<!--       th:href="@{'/user/page/' + ${currentPage - 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>-->
+<!--    <a th:if="${currentPage == totalPages}"-->
+<!--       th:href="@{'/user/page/' + ${currentPage}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>-->
+<!--    <span th:unless="${currentPage < totalPages}">Previous</span>-->
+
+<br></br>
+
+<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						<a th:if="${currentPage != i}"
+                           th:href="@{'/user/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					</span>
+
+
+<a th:if="${currentPage < totalPages}"
+   th:href="@{'/user/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next |</a>
+<span th:unless="${currentPage < totalPages}">Next</span>
+
+
+
+<a th:if="${currentPage < totalPages}"
+   th:href="@{'/user/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"> Last</a>
+<span th:unless="${currentPage < totalPages}">Last</span>
+
+<br><br/>
+
+<label for="pageSize">Select page size: </label>
+<select placeholder="page size" type="number" th:field="*{pageSize}" id="pageSize">
+    <option value=3> 3</option>
+    <option value=5> 5</option>
+    <option value=10> 10</option>
+</select>
+<input type="submit" value="Submit"/>
+
+</div>
+
 
 </body>
 </html>

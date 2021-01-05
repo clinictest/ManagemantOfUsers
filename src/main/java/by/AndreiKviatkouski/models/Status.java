@@ -1,4 +1,4 @@
-package by.AndreiKviatkouski.entities;
+package by.AndreiKviatkouski.models;
 
 public enum Status {
     ACTIVE,
