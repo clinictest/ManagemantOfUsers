@@ -13,35 +13,52 @@
 <div>
     <h2>Users Info</h2>
     <table border="1" bgcolor="beige">
-        <tr>
+
+        <tr bgcolor="#8cff3b">
             <th>UserName</th>
             <th>CreatedAt</th>
+            <th>UpdatedAt</th>
             <th>FirstName</th>
             <th>LastName</th>
             <th>Password</th>
             <th>Status</th>
+            <th>Lock/Unlock</th>
             <th>Role</th>
-            <th>Link</th>
-            <th>Link</th>
+            <th>Action</th>
         </tr>
 
        <td th:text="${user.username}"></td>
        <td th:text="${user.createdAt}"></td>
+       <td th:text="${user.updatedAt}"></td>
        <td th:text="${user.firstName}"></td>
        <td th:text="${user.lastName}"></td>
        <td th:text="${user.password}"></td>
        <td th:text="${user.status}"></td>
-       <td th:text="${user.roles}"></td>
-
         <td>
+            <form th:method="PUT" th:action="@{/user/{id}(id=${user.getId})}" th:object="${user}">
+                <label for="status"></label>
+                <select placeholder="status" type="text" th:field="*{status}" id="status" >
+                    <option value="ACTIVE">UNLOCK</option>
+                    <option value="INACTIVE">LOCK</option>
+                </select>
+                <input type="submit" value="Update"/>
+            </form>
+        </td>
+        <td>
+            <div style="float: left;" th:each="role :${user.roles}" th:text="${role.getName()}"></div>
+        </td>
+        <td>
+            <div>
+                <div style="float: left;" >
             <form th:method="GET" th:action="@{/user/{id}/edit(id=${user.getId()})}" th:object="${user}">
-                <input type="submit" value="Edit"/></form>
-        </td>
-        <td>
+                <input style="background-color: #147bff ; color: #000000;" type="submit" value="Edit"/></form>
+                </div>
+                <div style="float: right;" >
             <form th:method="DELETE" th:action="@{/user/{id}(id=${user.getId()})}" th:object="${user}">
-                <input type="submit" value="Delete"/></form>
+                <input style="background-color: #ff383a; color: #000000;" type="submit" value="Delete"/></form>
+                </div>
+            </div>
         </td>
-        </tr>
     </table>
 </div>
 <br/><br/>

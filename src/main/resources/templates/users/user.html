@@ -1,10 +1,65 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <!--    адаптивный экран для любых устройств-->
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>List of users</title>
 </head>
+
+
 <br>
+
+
+<!-- Текущая дата и часы-->
+<span id="current_date_time_block2"
+      style="color:#7e5a25; font-size:14pt;
+       border:2px solid #e1d4ae;
+        background:#e8e3d4;
+        padding:5px;"></span>
+
+<script type="text/javascript">
+
+
+    function zero_first_format(value) {
+        if (value < 10) {
+            value = '0' + value;
+        }
+        return value;
+    }
+
+    function date_time() {
+        var current_datetime = new Date();
+        var day = zero_first_format(current_datetime.getDate());
+        var month = zero_first_format(current_datetime.getMonth() + 1);
+        var year = current_datetime.getFullYear();
+        var hours = zero_first_format(current_datetime.getHours());
+        var minutes = zero_first_format(current_datetime.getMinutes());
+        var seconds = zero_first_format(current_datetime.getSeconds());
+
+        return "Date and time today:  " + day + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds;
+    }
+
+    setInterval(function () {
+        document.getElementById('current_date_time_block2').innerHTML = date_time();
+    }, 1000);
+
+</script>
+
+
+<br>
+<!-- Load icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<br>
+<br>
+<!-- The form -->
+<form class="example" th:action="@{/user}">
+    <input type="text" placeholder="Search.." name="search">
+    <button type="submit"><i class="fa fa-search"></i></button>
+</form>
+<br>
+
 
 <div class="container">
     <div th:fragment="content">
@@ -15,56 +70,57 @@
 
             <thead>
 
-            <tr bgcolor="#32cd32">
+            <tr bgcolor="#8cff3b">
                 <th>#</th>
-                <th>
-                    <a th:href="@{'/user/page/' + ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">
-                        username</a>
+                <!--                сортировка asc   dsc  по заголовку-->
+                <th><a th:href="@{'/user/page/' + ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">username</a>
                 </th>
-                <th>
-                    <a th:href="@{'/user/page/' + ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">
-                        Created_At</a>
-                </th>
-
-                <th>
-                    <a th:href="@{'/user/page/' + ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">
-                        Updated_At_At</a>
-                </th>
+                <th>Created_At</th>
+                <th>Updated_At_At</th>
                 <th>FirstName</th>
                 <th>LastName</th>
-                <th>Password</th>
                 <th>Status</th>
-                <th>Role</th>
-                <th>Link</th>
-                <th>Link</th>
-                <th>Link</th>
+                <th><a th:href="@{'/user/page/' + ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">Role</a>
+                </th>
+                <th>Action</th>
+
             </tr>
 
             </thead>
             <tbody>
             <tr th:each="user, iterStar : ${users}">
-                <td th:text="${iterStar.index+1}" bgcolor="#32cd32"></td>
+                <td th:text="${iterStar.index+1}" bgcolor="#8cff3b"></td>
                 <td th:text="${user.username}"></td>
                 <td th:text="${user.createdAt}"></td>
                 <td th:text="${user.updatedAt}"></td>
                 <td th:text="${user.firstName}"></td>
                 <td th:text="${user.lastName}"></td>
-                <td th:text="${user.password}"></td>
                 <td th:text="${user.status}"></td>
-                <td th:each="role :${user.roles}" th:text="${role.getName()}"></td>
 
                 <td>
-                    <form th:method="GET" th:action="@{/user/{id}(id=${user.getId()})}" th:object="${user}">
-                        <input type="submit" value="Show details"/></form>
+                    <div th:each="role :${user.roles}" th:text="${role.getName()}"></div>
                 </td>
                 <td>
-                    <form th:method="GET" th:action="@{/user/{id}/edit(id=${user.getId()})}" th:object="${user}">
-                        <input type="submit" value="Edit"/></form>
+                    <div>
+                        <div style="float: left;">
+                            <form th:method="GET" th:action="@{/user/{id}(id=${user.getId()})}" th:object="${user}">
+                                <input style="background-color: #147bff; color: #000000;" type="submit"
+                                       value="Show details"/></form>
+                        </div>
+                        <div style="float:left;">
+                            <form th:method="GET" th:action="@{/user/{id}/edit(id=${user.getId()})}"
+                                  th:object="${user}">
+                                <input style="background-color: #147bff; color: #000000;" type="submit" value="Edit"/>
+                            </form>
+                        </div>
+                        <div style="float:right;">
+                            <form th:method="DELETE" th:action="@{/user/{id}(id=${user.getId()})}" th:object="${user}">
+                                <input style="background-color: #ff383a; color: #000000;" type="submit" value="Delete"/>
+                            </form>
+                        </div>
+                    </div>
                 </td>
-                <td>
-                    <form th:method="DELETE" th:action="@{/user/{id}(id=${user.getId()})}" th:object="${user}">
-                        <input style="color: red" type="submit" value="Delete"/></form>
-                </td>
+
             </tr>
             <tbody>
 
@@ -73,6 +129,7 @@
         <br>
 
     </div>
+
 </div>
 <br/>
 <hr/>
@@ -114,18 +171,11 @@
 
 <br class="col-sm-2">
 
-    Total Rows: [[${totalItems}]]
-    Total Pages: [[${totalPages}]]
+Total Rows: [[${totalItems}]]
+Total Pages: [[${totalPages}]]
 
 </div>
-
-<!--    <a th:if="${currentPage < totalPages}"-->
-<!--       th:href="@{'/user/page/' + ${currentPage - 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>-->
-<!--    <a th:if="${currentPage == totalPages}"-->
-<!--       th:href="@{'/user/page/' + ${currentPage}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>-->
-<!--    <span th:unless="${currentPage < totalPages}">Previous</span>-->
-
-<br></br>
+<br>
 
 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
 						<a th:if="${currentPage != i}"
@@ -133,11 +183,9 @@
 						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
 					</span>
 
-
 <a th:if="${currentPage < totalPages}"
    th:href="@{'/user/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next |</a>
 <span th:unless="${currentPage < totalPages}">Next</span>
-
 
 
 <a th:if="${currentPage < totalPages}"
@@ -155,7 +203,6 @@
 <input type="submit" value="Submit"/>
 
 </div>
-
 
 </body>
 </html>

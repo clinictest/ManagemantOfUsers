@@ -4,7 +4,6 @@ import by.AndreiKviatkouski.models.Role;
 import by.AndreiKviatkouski.repositories.RoleRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -21,4 +20,9 @@ public class RoleService {
         return roleRepository.getRoles();
     }
 
+    public Set<Role> getOnlyRoleUser() {
+        Set<Role> roles = roleRepository.getRoles();
+        roles.remove(roleRepository.getOne(2L));
+        return roles;
+    }
 }

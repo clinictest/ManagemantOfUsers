@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -61,13 +58,15 @@ public class UserService implements UserDetailsService {
         for (int i = 0; i < userRepository.findAll().size(); i++) {
             User user1 = userRepository.findAll().get(i);
             if (user1.getPassword().equals(user.getPassword()) &&
-                    user1.getUsername().equals(user.getUsername())) {
+                    user1.getUsername().equals(user.getUsername()) &&
+                    user1.getStatus() == Status.ACTIVE) {
                 return true;
             }
         }
 
         return false;
     }
+
 
     public User findUserById(Long userId) {
         Optional<User> userFromDb = userRepository.findById(userId);
@@ -88,6 +87,7 @@ public class UserService implements UserDetailsService {
             user.setCreatedAt(new Date());
             user.setStatus(Status.ACTIVE);
             user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+            System.out.println(user);
             userRepository.save(user);
         }
         return true;

@@ -7,17 +7,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Set;
-
+//это класс нужен для валидации, т.к. пароль в БД идет шифрованный
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
+
 
     private Long id;
 
@@ -42,16 +41,16 @@ public class UserDto {
 
     private Status status;
 
-    private Role role;
+    private Set<Role> roles;
 
     public User convertToUserUser() {
-        UserDto userDto = new UserDto();
         User user = new User();
         user.setUsername(this.username);
         user.setPassword(this.password);
         user.setFirstName(this.firstName);
         user.setLastName(this.lastName);
         user.setStatus(this.status);
+        user.setRoles(this.roles);
 
         return user;
     }

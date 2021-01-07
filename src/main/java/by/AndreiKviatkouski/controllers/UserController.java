@@ -48,7 +48,6 @@ public class UserController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-
         model.addAttribute("users", listUsers);
         return "users/user";
     }
@@ -63,21 +62,36 @@ public class UserController {
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") long id) {
-        model.addAttribute("roles", roleService.getRoles());
         model.addAttribute("user", userService.show(id));
         return "users/edit";
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") @Valid UserDto user, BindingResult bindingResult,
+    public String update(@ModelAttribute("user") @Valid UserDto userDto,
+                         BindingResult bindingResult,
+                         @RequestParam("setRole") String setRole,
                          @PathVariable("id") long id) {
         if (bindingResult.hasErrors()) {
             return "users/edit";
         }
-        userService.update(user.convertToUserUser(), id);
+        switch (setRole) {
+            case "setAllRoles":
+                userDto.setRoles(roleService.getRoles());
+                break;
+            case "setOnlyUser":
+                userDto.setRoles(roleService.getOnlyRoleUser());
+                break;
+        }
+        userService.update(userDto.convertToUserUser(), id);
         return "redirect:/user";
     }
 
+    @PutMapping("/{id}")
+    public String chengStatus(@ModelAttribute("user") User user, @PathVariable("id") long id) {
+        userService.update(user, id);
+        //редирект работает корректно
+        return "redirect:/user/" + id;
+    }
 
     @GetMapping("/new")
     public String newUser(@ModelAttribute("user") User user) {
@@ -85,14 +99,14 @@ public class UserController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("user") @Valid UserDto user, BindingResult bindingResult, Model model) {
+    public String create(@ModelAttribute("user") @Valid UserDto userDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "users/new";
         }
-        if (!userService.saveUser(user.convertToUserUser())) {
+        if (!userService.saveUser(userDto.convertToUserUser())) {
             model.addAttribute("user", "user already exist ");
         } else {
-            userService.saveUser(user.convertToUserUser());
+            userService.saveUser(userDto.convertToUserUser());
             return "redirect:/user";
         }
         return "redirect:/user";
