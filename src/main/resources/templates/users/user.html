@@ -80,7 +80,7 @@
                 <th>FirstName</th>
                 <th>LastName</th>
                 <th>Status</th>
-                <th><a th:href="@{'/user/page/' + ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">Role</a>
+                <th><a th:href="@{'/user/page/' + ${currentPage} + '?sortField=roles&sortDir=' + ${reverseSortDir}}">Role</a>
                 </th>
                 <th>Action</th>
 
@@ -172,7 +172,7 @@
 <br class="col-sm-2">
 
 Total Rows: [[${totalItems}]]
-Total Pages: [[${totalPages}]]
+Total Pages: [[${totalPages}]]<br>
 
 </div>
 <br>
@@ -194,13 +194,35 @@ Total Pages: [[${totalPages}]]
 
 <br><br/>
 
-<label for="pageSize">Select page size: </label>
-<select placeholder="page size" type="number" th:field="*{pageSize}" id="pageSize">
-    <option value=3> 3</option>
-    <option value=5> 5</option>
-    <option value=10> 10</option>
-</select>
-<input type="submit" value="Submit"/>
+<form name="myform" th:method="GET" th:action="@{/user/page/1}" th:object="${user}">
+<label for="pageSizeNew">Select page size: </label>
+    <select type="number" th:name="pageSize" id="pageSizeNew" >
+        <option th:value=3> 1</option>
+        <option th:value=3> 2</option>
+        <option th:value=3> 3</option>
+        <option th:value=3> 4</option>
+        <option th:value=3> 5</option>
+        <option th:value=5> 6</option>
+        <option th:value=10> 7</option>
+        <option th:value=10> 8</option>
+        <option th:value=10> 9</option>
+        <option th:value=10> 10</option>
+    </select>
+
+
+    <input hidden="hidden" name="sortDir" th:value="${sortDir}"/>
+    <input hidden="hidden" name="sortField" th:value="${sortField}"/>
+    <input hidden="hidden" name="currentPage" th:value="${currentPage}"/>
+
+    <input type="submit" value="Submit"/>
+
+<!--    <script type="text/javascript">-->
+<!--        document.myform.submit();-->
+<!--    </script>-->
+
+</form>
+
+
 
 </div>
 

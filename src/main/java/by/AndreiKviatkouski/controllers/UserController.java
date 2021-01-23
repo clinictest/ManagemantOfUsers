@@ -29,18 +29,20 @@ public class UserController {
 
     @GetMapping()
     public String viewHomePage(Model model) {
-        return findPaginated(1, "username", "asc", model);
+        return findPaginated(1, "username",2,"asc", model);
     }
 
     @GetMapping("/page/{pageNo}")
     public String findPaginated(@PathVariable(value = "pageNo") int pageNo,
                                 @RequestParam("sortField") String sortField,
+                                @RequestParam(value = "pageSize") int pageSize,
                                 @RequestParam("sortDir") String sortDir,
                                 Model model) {
-        int pageSize = 3;
-        Page<User> page = userService.findPaginated(pageNo, pageSize, sortField, sortDir);
+
+        int pageSizeNew = pageSize;
+
+        Page<User> page = userService.findPaginated(pageNo, pageSizeNew, sortField, sortDir);
         List<User> listUsers = page.getContent();
-        model.addAttribute("pageSize", pageSize);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
