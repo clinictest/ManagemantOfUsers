@@ -1,7 +1,7 @@
-package by.AndreiKviatkouski.service;
+package com.testapp.service;
 
-import by.AndreiKviatkouski.models.Role;
-import by.AndreiKviatkouski.repositories.RoleRepository;
+import com.testapp.models.Role;
+import com.testapp.repositories.RoleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;

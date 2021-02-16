@@ -1,9 +1,9 @@
-package by.AndreiKviatkouski.controllers;
+package com.testapp.controllers;
 
-import by.AndreiKviatkouski.dto.UserDto;
-import by.AndreiKviatkouski.models.User;
-import by.AndreiKviatkouski.service.RoleService;
-import by.AndreiKviatkouski.service.UserService;
+import com.testapp.dto.UserDto;
+import com.testapp.models.User;
+import com.testapp.service.RoleService;
+import com.testapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -29,7 +29,7 @@ public class UserController {
 
     @GetMapping()
     public String viewHomePage(Model model) {
-        return findPaginated(1, "username",2,"asc", model);
+        return findPaginated(1, "username",5,"asc", model);
     }
 
     @GetMapping("/page/{pageNo}")
@@ -39,10 +39,9 @@ public class UserController {
                                 @RequestParam("sortDir") String sortDir,
                                 Model model) {
 
-        int pageSizeNew = pageSize;
-
-        Page<User> page = userService.findPaginated(pageNo, pageSizeNew, sortField, sortDir);
+        Page<User> page = userService.findPaginated(pageNo, pageSize, sortField, sortDir);
         List<User> listUsers = page.getContent();
+        model.addAttribute("pageSize",pageSize);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
@@ -91,7 +90,6 @@ public class UserController {
     @PutMapping("/{id}")
     public String chengStatus(@ModelAttribute("user") User user, @PathVariable("id") long id) {
         userService.update(user, id);
-        //редирект работает корректно
         return "redirect:/user/" + id;
     }
 
