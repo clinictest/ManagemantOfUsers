@@ -1,4 +1,4 @@
-# Тестовое задание на позицию Junior Java Developer
+# Users Management
 Разработать систему управления пользователями.<br>
 
 ![](https://www.mrvoip.com/otherservice_img/21026042018122748.png)
@@ -40,7 +40,7 @@ Edit        |/user/{id}/edit  Редактирование пользовате�
 1.  Java 8+
 2.  Spring (Spring Boot, Spring MVC, Spring Data, Spring Security)
 3.  PostgreSQL
-4.  Html Template Engine - любой (Thymeleaf, Freemarker, etc.)
-5.  Gradle
-6.  Опционально: сборка docker-образов
+4.  Html Template Engine - Thymeleaf
+5.  Maven
+6.  сборка docker-образов
 ### Можно использовать сторонние библиотеки 
