@@ -31,7 +31,7 @@ VALUES (1, 'ROLE_USER'),
        (2, 'ROLE_ADMIN');
 
 INSERT INTO user_account
-VALUES (1, 'SaraQ', 'A121', 'Sara', 'Conor', 'ACTIVE', '2021-01-04 23:23:30.000000'),
+VALUES (1, 'Sara', 'A121', 'Sara', 'Conor', 'ACTIVE', '2021-01-04 23:23:30.000000'),
        (2, 'ToniW', 'A122', 'Toni', 'Faro', 'ACTIVE', '2021-01-04 23:23:30.000000'),
        (3, 'LanaR', 'A123', 'Lana', 'Picasso', 'ACTIVE', '2021-01-04 23:23:30.000000'),
        (4, 'BobT', 'A124', 'Bob', 'Busch', 'INACTIVE', '2021-01-04 23:23:30.000000'),

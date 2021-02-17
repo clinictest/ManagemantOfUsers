@@ -4,6 +4,10 @@ FROM maven:3.6.1-jdk-8-alpine as builder
 MAINTAINER Author AndreiKviatkouski <a.kviatkouski@softteco.com>
 
 WORKDIR /build
+
+ENV PORT 8080
+ENV HOST 0.0.0.0
+
 COPY pom.xml .
 COPY src src
 
@@ -17,10 +21,6 @@ WORKDIR /app
 
 FROM adoptopenjdk/openjdk8:alpine-slim
 
-# Copy the jar to the production image from the builder stage.
 COPY --from=builder /build/target/ManagemantOfUsers-1.0-SNAPSHOT.jar /app/app.jar
 
-# Run the web service on container startup.
-CMD ["java", "-jar", "target/ManagemantOfUsers.jar "]
-
-
+CMD ["java", "-jar", "/app/app.jar"]
