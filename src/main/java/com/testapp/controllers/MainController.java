@@ -1,7 +1,7 @@
-package by.AndreiKviatkouski.controllers;
+package com.testapp.controllers;
 
-import by.AndreiKviatkouski.models.User;
-import by.AndreiKviatkouski.service.UserService;
+import com.testapp.models.User;
+import com.testapp.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;

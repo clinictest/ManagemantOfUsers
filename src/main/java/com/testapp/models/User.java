@@ -1,4 +1,4 @@
-package by.AndreiKviatkouski.models;
+package com.testapp.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

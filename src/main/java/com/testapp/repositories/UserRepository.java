@@ -1,6 +1,6 @@
-package by.AndreiKviatkouski.repositories;
+package com.testapp.repositories;
 
-import by.AndreiKviatkouski.models.User;
+import com.testapp.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

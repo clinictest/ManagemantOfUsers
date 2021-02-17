@@ -1,4 +1,4 @@
-package by.AndreiKviatkouski.models;
+package com.testapp.models;
 
 public enum Status {
     ACTIVE,

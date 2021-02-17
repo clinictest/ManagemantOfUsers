@@ -1,6 +1,6 @@
-package by.AndreiKviatkouski.repositories;
+package com.testapp.repositories;
 
-import by.AndreiKviatkouski.models.Role;
+import com.testapp.models.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

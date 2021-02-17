@@ -1,11 +1,9 @@
-package by.AndreiKviatkouski.config;
+package com.testapp.config;
 
-import by.AndreiKviatkouski.service.UserService;
+import com.testapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -36,39 +34,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                //Доступ только для не зарегистрированных пользователей
-                .antMatchers("/login").not().fullyAuthenticated()
-                //Доступ только для пользователей с ролью Администратор
-                .antMatchers("/user/**").hasRole("ADMIN")
-                //Доступ только для пользователей с ролью User
-                .antMatchers("/user/{id}").hasRole("USER")
-                .antMatchers("/user").hasRole("USER")
-                //Доступ разрешен всем пользователей
-                // .antMatchers("/login", "/resources/**").permitAll()
-                //Все остальные страницы требуют аутентификации
+                .antMatchers("/user/{id}/**").hasRole("ADMIN")
+                .antMatchers("/user/{id}","/page/{pageNo}").hasRole("USER")
                 .anyRequest().authenticated()
                 .and()
-                //Настройка для входа в систему
                 .formLogin()
                 .loginPage("/login")
-                //Перенаправление на главную страницу после успешного входа
                 .defaultSuccessUrl("/user")
+                .permitAll()
+                .failureUrl("/login?error")
                 .permitAll()
                 .and()
                 .logout()
                 .permitAll()
-                .logoutSuccessUrl("/login");
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true);
+
     }
 
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder());
     }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web
-                .ignoring()
-                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/favicon.ico").anyRequest();
-    }
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web
+//                .ignoring()
+//                .antMatchers("/resources/**", "/static/**", "/css/**","/js/**","/images/**","/favicon.ico").anyRequest();
+//    }
 }

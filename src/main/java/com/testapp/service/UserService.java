@@ -1,10 +1,10 @@
-package by.AndreiKviatkouski.service;
+package com.testapp.service;
 
 
-import by.AndreiKviatkouski.models.Role;
-import by.AndreiKviatkouski.models.Status;
-import by.AndreiKviatkouski.models.User;
-import by.AndreiKviatkouski.repositories.UserRepository;
+import com.testapp.models.Role;
+import com.testapp.models.Status;
+import com.testapp.models.User;
+import com.testapp.repositories.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

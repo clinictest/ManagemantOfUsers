@@ -1,8 +1,8 @@
-package by.AndreiKviatkouski.dto;
+package com.testapp.dto;
 
-import by.AndreiKviatkouski.models.Role;
-import by.AndreiKviatkouski.models.Status;
-import by.AndreiKviatkouski.models.User;
+import com.testapp.models.Role;
+import com.testapp.models.Status;
+import com.testapp.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
