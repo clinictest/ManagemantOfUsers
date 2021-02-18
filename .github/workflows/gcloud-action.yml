@@ -32,15 +32,20 @@ jobs:
 #      - name: Docker Run
 #        run: docker run -d -p 8080:8080 newapp:1.0
 
+
       - name: Checkout
-        uses: actions/checkout@v1
+      uses: actions/checkout@master
 
       # Setup gcloud CLI
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+       - name: Setup GCP Service Account
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
            version: 'latest'
            service_account_email: ${{ secrets.SA_EMAIL }}
            service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
+
+           credentials: ${{ secrets.gcp_credentials }}
+
 
             # Configure gcloud CLI
 #      - name: gcloud Set up
