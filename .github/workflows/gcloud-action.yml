@@ -26,11 +26,11 @@ jobs:
       - name: Build with Maven
         run: mvn -B clean package --file pom.xml
 
-      - name: Docker Build
-        run: docker build -t newapp:1.0 .
-
-      - name: Docker Run
-        run: docker run -d -p 8080:8080 newapp:1.0
+#      - name: Docker Build
+#        run: docker build -t newapp:1.0 .
+#
+#      - name: Docker Run
+#        run: docker run -d -p 8080:8080 newapp:1.0
 
       - name: Checkout
         uses: actions/checkout@v1
@@ -45,15 +45,27 @@ jobs:
             # Configure gcloud CLI
       - name: gcloud Set up
         run: |
-                gcloud config set project $PROJECT_ID
-            # Build and push image to Google Container Registry
+          gcloud config set project $PROJECT_ID
+
       - name: Build
         run: |
-                  gcloud builds submit -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA
-            # Deploy image to Cloud Run
+           docker build -t gcr.io/$PROJECT_ID/$SERVICE_NAME .
+
+      - name: Push
+        run: |
+           docker push gcr.io/$PROJECT_ID/$SERVICE_NAME
+
+#        # Build and push image to Google Container Registry
+#      - name: Build
+#        run: |
+#          gcloud builds submit -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA
+
+        # Deploy image to Cloud Run
       - name: Deploy
         run: |
-                   gcloud run deploy $SERVICE_NAME \
-                    --region $RUN_REGION \
-                    --image gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
-                    --platform managed
+          gcloud run deploy $SERVICE_NAME \
+          --region $RUN_REGION \
+          --image gcr.io/$PROJECT_ID/$SERVICE_NAME \
+          --platform managed \
+          --allow-unauthenticated \
+          --project $PROJECT_ID
