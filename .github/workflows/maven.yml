@@ -1,4 +1,4 @@
-name: MyApp CICD
+name: MyApp CI-CD
 
 on:
   push:
@@ -20,14 +20,15 @@ jobs:
       - name: Build with Maven
         run: mvn -B clean package --file pom.xml
 
-      - name: Check Out Repo
-        uses: actions/checkout@v2
+      - name: Docker Build
+        run: docker build -t newapp:1.0
 
-      - name: Build
-        run: docker build -t newapp:1.0 .
-        
-      - name: Check Out Repo
-        uses: actions/checkout@v2
-
-      - name: Build
+      - name: Docker Run
         run: docker run -d -p 8080:8080 newapp:1.0
+
+      - name: Googl Cloud Bild
+        run: gcloud builds submit --tag gcr.io/users-management-305009/myapp
+
+      - name: Googl Cloud Deploy
+        run: gcloud run deploy --image gcr.io/users-management-305009/myapp --platform managed
+
