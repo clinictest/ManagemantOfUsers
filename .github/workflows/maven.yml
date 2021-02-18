@@ -21,10 +21,10 @@ jobs:
         run: mvn -B clean package --file pom.xml
 
       - name: Docker Build
-        run: docker build -t newapp:1.0
+        run: docker build -t newapp:1.0 .
 
       - name: Docker Run
-        run: docker run -d -p 8080:8080 newapp:1.0 .
+        run: docker run -d -p 8080:8080 newapp:1.0 
 
       - name: Googl Cloud Bild
         run: gcloud builds submit --tag gcr.io/users-management-305009/myapp
