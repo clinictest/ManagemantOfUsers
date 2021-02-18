@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ master ]
 
+    env:
+      PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      RUN_REGION: us-central1
+      SERVICE_NAME: myapp
+
+
 jobs:
   build:
 
@@ -21,14 +27,34 @@ jobs:
         run: mvn -B clean package --file pom.xml
 
       - name: Docker Build
-        run: docker build -t newapp:1.0 .
+        un: docker build -t newapp:1.0 .
 
       - name: Docker Run
-        run: docker run -d -p 8080:8080 newapp:1.0 
+        run: docker run -d -p 8080:8080 newapp:1.0
 
-      - name: Googl Cloud Bild
-        run: gcloud builds submit --tag gcr.io/users-management-305009/myapp
+      - name: Checkout
+        uses: actions/checkout@v1
 
-      - name: Googl Cloud Deploy
-        run: gcloud run deploy --image gcr.io/users-management-305009/myapp --platform managed
+      # Setup gcloud CLI
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+              with:
+                version: '275.0.0'
+                service_account_email: ${{ secrets.SA_EMAIL }}
+                service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
+
+            # Configure gcloud CLI
+            - name: gcloud Set up
+              run: |
+                gcloud config set project $PROJECT_ID
+            # Build and push image to Google Container Registry
+            - name: Build
+              run: |
+                gcloud builds submit -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA
+            # Deploy image to Cloud Run
+            - name: Deploy
+              run: |
+                gcloud run deploy $SERVICE_NAME \
+                  --region $RUN_REGION \
+                  --image gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
+                  --platform managed
 
