@@ -27,6 +27,7 @@ jobs:
         run: mvn -B clean package --file pom.xml
 
 
+
 #      - name: Docker Build
 #        run: docker build -t newapp:1.0 .
 #
@@ -45,7 +46,7 @@ jobs:
            service_account_email: ${{ secrets.SA_EMAIL }}
            service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
 
-           credentials: ${{ secrets.gcp_credentials }}
+#           credentials: ${{ secrets.gcp_credentials }}
 
 
             # Configure gcloud CLI
