@@ -30,11 +30,6 @@ jobs:
            service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
 
 
-        # Docker build
-      - name: Docker Build
-        run: |
-           docker build -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA .
-
        # Configure gcloud CLI
       - name: gcloud Set up
         run: |
