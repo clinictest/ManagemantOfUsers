@@ -36,11 +36,15 @@ Lock/Unlock:| должно приводить к смене состояния A
 New         |/user/new   Создание нового пользователя При наличии валидационных ошибок <br/> должно показываться <br/> соответствующее сообщение на UI.
 Edit        |/user/{id}/edit  Редактирование пользователя <br/> При наличии валидационых ошибок <br/> должно показываться <br/>соответствующее сообщение на UI.
 
-### Предпочтительный стек технологий:
-1.  Java 8+
+Приложение должно автоматически разворачивать в Google Cloud при push или pull request в ветку master <br/>
+
+
+### Стек технологий:
+1.  Java 8
 2.  Spring (Spring Boot, Spring MVC, Spring Data, Spring Security)
-3.  PostgreSQL
+3.  Google Cloud PostgreSQL 12
 4.  Html Template Engine - Thymeleaf
 5.  Maven
-6.  сборка docker-образов
-### Можно использовать сторонние библиотеки 
+6.  Docker 
+7.  CI/CD GitHub Action
+8.  Deploy in Google Cloud Run
