@@ -3,7 +3,7 @@
 
 *App* | *Cloud* | *CI/CD*
 :--- |:---|:---
-<div style="width: 100px">![](https://www.mrvoip.com/otherservice_img/21026042018122748.png)|<div style="width: 100px">![](https://seopulses.ru/wp-content/uploads/2020/05/1-3.jpg) |<div style="width: 100px">![](https://www.aegisiscblog.com/wp-content/uploads/2019/12/DevOps.jpg) 
+![](https://www.mrvoip.com/otherservice_img/21026042018122748.png)|![](https://seopulses.ru/wp-content/uploads/2020/05/1-3.jpg) |![](https://www.aegisiscblog.com/wp-content/uploads/2019/12/DevOps.jpg) 
 
 
 
