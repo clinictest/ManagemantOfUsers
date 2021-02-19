@@ -1,7 +1,11 @@
 # Users Management
 Разработать систему управления пользователями.<br>
 
-![](https://www.mrvoip.com/otherservice_img/21026042018122748.png)
+*App* | *Cloud* | *CI/CD*
+:--- |:---|:---
+<div style="width: 100px">![](https://www.mrvoip.com/otherservice_img/21026042018122748.png)|<div style="width: 100px">![](https://seopulses.ru/wp-content/uploads/2020/05/1-3.jpg) |<div style="width: 100px">![](https://www.aegisiscblog.com/wp-content/uploads/2019/12/DevOps.jpg) 
+
+
 
 Система должна представлять собой WEB-приложение, которое предоставляет интерфейс <br/>
 управления пользователями.<br/>
